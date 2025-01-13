@@ -1,0 +1,40 @@
+services:
+  app:
+    image: mariefugier/spring-api-postgres
+    build:
+      context: .
+    container_name: api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+  db:
+    image: mariefugier/db-postgresql
+    container_name: db
+    ports:
+      - "5432:5432"  
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-d", "hibernate1", "-U", "hibernate1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5  
+    networks:
+      - mynetwork
+    environment:
+      - POSTGRES_USER=hibernate1
+      - POSTGRES_PASSWORD=123456
+  db2:
+    image: 'db-postgresql'
+    container_name: db2
+    networks:
+      - mynetwork
+    environment:
+      - POSTGRES_USER=hibernate2
+      - POSTGRES_PASSWORD=123456
+networks:
+  mynetwork:
+    driver: bridge

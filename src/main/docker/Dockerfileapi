@@ -1,0 +1,8 @@
+FROM openjdk:17-jdk-slim
+RUN apt-get update && apt-get install -y netcat
+COPY wait.sh /wait.sh
+RUN chmod +x /wait.sh
+COPY addenplus-1.0.0.jar .
+ENTRYPOINT ["./wait.sh", "db", "5432", "java", "-jar", "addenplus-1.0.0.jar"]
+
+# docker build -t spring-api-postgres -f Dockerfileapi .

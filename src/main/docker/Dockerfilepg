@@ -1,0 +1,6 @@
+FROM postgres:13.1-alpine
+ENV SPRING_PROFILES_ACTIVE=prod
+COPY postgresql.sql /docker-entrypoint-initdb.d/
+EXPOSE 5432
+
+# docker build -t db-postgresql -f Dockerfilepg .
